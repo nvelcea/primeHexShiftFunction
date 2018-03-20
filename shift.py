@@ -20,13 +20,13 @@ slashVar = oldPath[2]
 #newPath = "/data/temp"
 newPath = r"C:\NUCAR\primeHex\tempSorted"
 
-fileNum = 0
-shift = int(0)
+fileNum = sys.argv[1]
+shift = int(sys.argv[2])
 
 while(fileNum==0): #there is a separate loop for the first file because you do not need to shift it
     #also is while loop so that it will repeat if correct file is not yet present
     for file in os.listdir(oldPath):
-        thisFile = file.strip('~.txt')
+        thisFile = file.strip('.txt')
         if(0==int(thisFile)):
             with open(oldPath+ slashVar + file, "r") as f: ## this gets the value of the last line in the file
                 add = int(f.readlines(0)[99])
@@ -44,7 +44,7 @@ while(fileNum>0):
     sleep(1) #delay to not waste resources
     for file in os.listdir(oldPath):
         sleep(1) #delay to not waste resources
-        thisFile = file.strip('~.txt') ## gets the value of the current file
+        thisFile = file.strip('.txt') ## gets the value of the current file
         if fileNum == int(thisFile): ## if this is the next file in order
             print("This File is: " + thisFile) ##debug shit
             with open(oldPath + slashVar + file, "r") as f:
