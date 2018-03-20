@@ -13,12 +13,12 @@ import getpass
 
 username = getpass.getuser()
 
-#oldPath = "/data/t2"
-oldPath = r"C:\NUCAR\primeHex\temp"
-slashVar = oldPath[2]
-#slashVar = "/"
-#newPath = "/data/temp"
-newPath = r"C:\NUCAR\primeHex\tempSorted"
+oldPath = "/temp2"
+#oldPath = r"C:\NUCAR\primeHex\temp"
+#slashVar = oldPath[2]
+slashVar = "/"
+newPath = "/temp"
+#newPath = r"C:\NUCAR\primeHex\tempSorted"
 
 fileNum = sys.argv[1]
 shift = int(sys.argv[2])
@@ -42,29 +42,30 @@ while(fileNum==0): #there is a separate loop for the first file because you do n
 
 while(fileNum>0):
     sleep(1) #delay to not waste resources
-    for file in os.listdir(oldPath):
+    thisFile = ("{:0>10d}".format(fileNum)) + ".txt"
+    testFilePath = oldPath + slashVar + thisFile
+    if(os.path.exists(testFilePath)):
         sleep(1) #delay to not waste resources
-        thisFile = file.strip('.txt') ## gets the value of the current file
-        if fileNum == int(thisFile): ## if this is the next file in order
-            print("This File is: " + thisFile) ##debug shit
-            with open(oldPath + slashVar + file, "r") as f:
-                fileList = f.readlines(0)
-                for x  in range (0,100): #Makes integer list of each line in selected file & shifts each cell accordingly
-                    fileList[x]=int(fileList[x])
-                    fileList[x]=(fileList[x]+shift)%6 #shifting
-                print(fileList)
-                shift = fileList[99] # value of last line (shifted)
-                print(shift)
-                f.close()
-            with open(oldPath + slashVar + file, "w") as f:
-                for x in range (0,100): #rewrites the file
-                    f.write(str(fileList[x])+'\n')
-                f.close()
-            #this deletes the old file, and writes a new file
-            oldFilePath = oldPath + slashVar + file
-            newFilePath = newPath + slashVar + ("{:0>10d}".format(fileNum)) + ".txt"
-            shutil.copy(oldFilePath, newFilePath)
-            os.remove(oldFilePath)
-            fileNum+=1
+        thisFile = thisFile.strip(".txt") ## gets the value of the current file
+        print("This File is: " + thisFile) ##debug shit
+        with open(testFilePath, "r") as f:
+            fileList = f.readlines(0)
+            for x  in range (0,100): #Makes integer list of each line in selected file & shifts each cell accordingly
+                fileList[x]=int(fileList[x])
+                fileList[x]=(fileList[x]+shift)%6 #shifting
+            print(fileList)
+            shift = fileList[99] # value of last line (shifted)
+            print(shift)
+            f.close()
+        with open(oldPath + slashVar + file, "w") as f:
+            for x in range (0,100): #rewrites the file
+                f.write(str(fileList[x])+'\n')
+            f.close()
+        #this deletes the old file, and writes a new file
+        oldFilePath = oldPath + slashVar + file
+        newFilePath = newPath + slashVar + ("{:0>10d}".format(fileNum)) + ".txt"
+        shutil.copy(oldFilePath, newFilePath)
+        os.remove(oldFilePath)
+        fileNum+=1
 
 
